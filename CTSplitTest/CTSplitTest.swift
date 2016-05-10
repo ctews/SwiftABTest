@@ -10,29 +10,79 @@ import Foundation
 
 struct CTSplitTest {
 
+    // Typealias
     typealias SplitGroup = () -> Void
 
-    func runABTest(distribution:[Double]=[0.5,0.5], groupA:ReferralGroup?, groupB:ReferralGroup?) {
-        let rnd = self._randomNumber(probabilities: distribution)
+    // Constants
+    let kSplitGroupKey = "splitGroup"
+    let kGroupA = "groupA"
+    let kGroupB = "groupB"
+    let kGroupC = "groupC"
 
+    func runABTest(distribution:[Double]=[0.5,0.5], groupA:SplitGroup?, groupB:SplitGroup?) {
+        let membership = _getGroupMembership()
+
+        guard membership == nil else {
+            if membership == kGroupA {
+                groupA?()
+            } else {
+                groupB?()
+            }
+
+            return
+        }
+
+        let rnd = self._randomNumber(probabilities: distribution)
         if rnd == 0 {
+            _saveGroupMembership(kGroupA)
             groupA?()
         } else {
+            _saveGroupMembership(kGroupB)
             groupB?()
         }
     }
 
     func runABCTest(groupA groupA:SplitGroup?, groupB:SplitGroup?, groupC:SplitGroup?) {
+        let membership = _getGroupMembership()
+        guard membership == nil else {
+            if membership == kGroupA {
+                groupA?()
+            } else if membership == kGroupB {
+                groupB?()
+            } else {
+                groupC?()
+            }
+
+            return
+        }
+
         let rnd = self._randomNumber(probabilities: [0.33, 0.33, 0,33])
 
         if rnd == 0 {
+            _saveGroupMembership(kGroupA)
             groupA?()
         } else if rnd == 1 {
+            _saveGroupMembership(kGroupB)
             groupB?()
         } else {
+            _saveGroupMembership(kGroupC)
             groupC?()
         }
     }
+
+    private func _getGroupMembership() -> String? {
+        let defaults = NSUserDefaults.standardUserDefaults()
+        let membership = defaults.objectForKey(kSplitGroupKey) as? String
+
+        return membership
+    }
+
+    private func _saveGroupMembership(group:String) {
+        let defaults = NSUserDefaults.standardUserDefaults()
+        defaults.setObject(group, forKey: kSplitGroupKey)
+        defaults.synchronize()
+    }
+
 
     /**
      * Create a random number with distribution
