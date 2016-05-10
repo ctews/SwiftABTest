@@ -12,8 +12,8 @@ struct CTSplitTest {
 
     typealias SplitGroup = () -> Void
 
-    func runABTest(groupA groupA:SplitGroup?, groupB:SplitGroup?) {
-        let rnd = self._randomNumber(probabilities: [0.5, 0.5])
+    func runABTest(distribution:[Double]=[0.5,0.5], groupA:ReferralGroup?, groupB:ReferralGroup?) {
+        let rnd = self._randomNumber(probabilities: distribution)
 
         if rnd == 0 {
             groupA?()
@@ -31,16 +31,6 @@ struct CTSplitTest {
             groupB?()
         } else {
             groupC?()
-        }
-    }
-
-    func runABTestWithDistribution(distribution:[Double], groupA:SplitGroup?, groupB:SplitGroup?) {
-        let rnd = self._randomNumber(probabilities: distribution)
-
-        if rnd == 0 {
-            groupA?()
-        } else {
-            groupB?()
         }
     }
 
