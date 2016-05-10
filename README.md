@@ -1,5 +1,6 @@
 # SwiftABTest
 This is a very basic Split Testing implemented in Swift. You can use A/B Testing and "A/B/C" testing. You can also have a weighted distribution for the A/B testing.
+SwiftABTest will save the split group membership of a user into NSUserDefaults to guarantee this specific user always gets the same result until an app update.
 
 ## Usage
 Just use `CTSplitTest().runABTest(...)` - it uses a 50-50 weighted distribution by default but you can adjust it by using `CTSplitTest.runABTest([0.3,0.7],...)` to have a 30-70 weighted distribution.
