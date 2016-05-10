@@ -1,9 +1,9 @@
 //
-//  ABTestingUtils.swift
-//  printME
+//  CTSplitTest.swift
+//  Twitter - @ctews
 //
 //  Created by Christoffer Tews on 09.05.16.
-//  Copyright © 2016 Vukee GmbH & Co. KG. All rights reserved.
+//  Copyright © 2016 Christoffer Tews. All rights reserved.
 //
 
 import Foundation
